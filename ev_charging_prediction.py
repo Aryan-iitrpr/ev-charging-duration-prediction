@@ -240,5 +240,36 @@ results.to_csv(
     index=False
 )
 
+# Actual vs predicted graph
+plt.figure(figsize=(7, 6))
+plt.scatter(y_test, test_pred, alpha=0.7)
+
+lower = min(y_test.min(), test_pred.min())
+upper = max(y_test.max(), test_pred.max())
+plt.plot([lower, upper], [lower, upper], "r--")
+
+plt.xlabel("Actual charging duration (hours)")
+plt.ylabel("Predicted charging duration (hours)")
+plt.title("Actual vs Predicted: Test Set")
+plt.tight_layout()
+plt.savefig(OUTPUT_DIR / "actual_vs_predicted.png", dpi=150)
+plt.close()
+
+# Residual graph
+residuals = y_test.to_numpy() - test_pred
+
+plt.figure(figsize=(7, 5))
+plt.scatter(test_pred, residuals, alpha=0.7)
+plt.axhline(0, color="red", linestyle="--")
+plt.xlabel("Predicted charging duration (hours)")
+plt.ylabel("Residual (actual - predicted)")
+plt.title("Residual Plot: Test Set")
+plt.tight_layout()
+plt.savefig(OUTPUT_DIR / "residual_plot.png", dpi=150)
+plt.close()
+
+print("\nSaved results and plots in the outputs folder.")
+
+
 print("\nSaved results and plots in the outputs folder.")
 print("Review the test metrics before drawing conclusions.")
