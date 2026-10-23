@@ -88,6 +88,20 @@ python ev_charging_prediction.py
 
 The script reads the dataset from the repository's `data/` folder, performs analysis, trains and evaluates the models, and saves output files in the `outputs/` folder.
 
+## Expected Output
+
+After running the project, the following files will be generated in the `outputs/` folder:
+
+- `duration_distribution.png` — Distribution of charging duration.
+- `actual_vs_predicted.png` — Actual versus predicted charging durations.
+- `residual_plot.png` — Residual plot for the Linear Regression model.
+- `evaluation_metrics.csv` — Evaluation metrics for the baseline and Linear Regression models.
+
+### Actual vs Predicted Charging Duration
+
+![Actual vs predicted charging duration](outputs/actual_vs_predicted.png)
+
+
 ## Methodology
 
 1. Load and inspect the dataset.
