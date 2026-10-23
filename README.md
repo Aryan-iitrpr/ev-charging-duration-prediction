@@ -1,6 +1,8 @@
-# ev-charging-duration-prediction
-Predicting electric vehicle charging duration using linear regression.
 # EV Charging Duration Prediction
+
+Predicting electric vehicle charging duration using exploratory data analysis and a Linear Regression model.
+
+## Team Members and Roles
 
 Predicting electric vehicle charging duration using exploratory data analysis and a Linear Regression model.
 
