@@ -10,7 +10,7 @@ Predicting electric vehicle charging duration using exploratory data analysis an
 
 | Team Member | Role and Contribution |
 |---|---|
-| [Member 2 name] | [Actual contribution to the project] |
+| [Member 1 name] | [Actual contribution to the project] |
 | [Member 2 name] | [Actual contribution to the project] |
 | Aryan-iitrpr | Project setup, data analysis, model implementation, evaluation, and GitHub repository |
 | [Member 4 name] | [Actual contribution to the project] |
