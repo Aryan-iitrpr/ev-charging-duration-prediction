@@ -19,6 +19,7 @@ from sklearn.metrics import (
     mean_squared_error,
     r2_score
 )
+from sklearn.dummy import DummyRegressor
 
 warnings.filterwarnings("ignore")
 
@@ -205,67 +206,38 @@ model = Pipeline([
     ("regressor", LinearRegression()),
 ])
 
-# Train the model
+
+# Train the linear regression model
 model.fit(X_train, y_train)
 
-# Evaluate on training and unseen test data
-train_pred = model.predict(X_train)
-test_pred = model.predict(X_test)
+# Simple baseline: predict the training-set mean
+baseline = DummyRegressor(strategy="mean")
+baseline.fit(X_train, y_train)
 
-def evaluate(label, actual, predicted):
+# Predictions on unseen test data
+test_pred = model.predict(X_test)
+baseline_pred = baseline.predict(X_test)
+
+def evaluate(name, actual, predicted):
     mse = mean_squared_error(actual, predicted)
     return {
-        "Dataset": label,
-        "MAE": mean_absolute_error(actual, predicted),
-        "MSE": mse,
-        "RMSE": np.sqrt(mse),
+        "Model": name,
+        "MAE_hours": mean_absolute_error(actual, predicted),
+        "RMSE_hours": np.sqrt(mse),
         "R2": r2_score(actual, predicted),
     }
 
 results = pd.DataFrame([
-    evaluate("Training", y_train, train_pred),
-    evaluate("Testing", y_test, test_pred),
+    evaluate("Mean baseline", y_test, baseline_pred),
+    evaluate("Linear Regression", y_test, test_pred),
 ])
 
-print("\nMODEL EVALUATION")
+print("\nTEST SET MODEL COMPARISON")
 print(results.round(4).to_string(index=False))
 
-results.to_csv(OUTPUT_DIR / "evaluation_metrics.csv", index=False)
-
-# Actual vs predicted plot
-plt.figure(figsize=(7, 6))
-plt.scatter(y_test, test_pred, alpha=0.7)
-
-lower = min(y_test.min(), test_pred.min())
-upper = max(y_test.max(), test_pred.max())
-plt.plot([lower, upper], [lower, upper], "r--")
-
-plt.xlabel("Actual charging duration (hours)")
-plt.ylabel("Predicted charging duration (hours)")
-plt.title("Actual vs Predicted: Test Set")
-plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "actual_vs_predicted.png", dpi=150)
-plt.close()
-
-# Residual plot
-residuals = y_test.to_numpy() - test_pred
-plt.figure(figsize=(7, 5))
-plt.scatter(test_pred, residuals, alpha=0.7)
-plt.axhline(0, color="red", linestyle="--")
-plt.xlabel("Predicted charging duration (hours)")
-plt.ylabel("Residual (actual - predicted)")
-plt.title("Residual Plot: Test Set")
-plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "residual_plot.png", dpi=150)
-plt.close()
-
-# Save example predictions
-prediction_table = pd.DataFrame({
-    "Actual_duration_hours": y_test.to_numpy(),
-    "Predicted_duration_hours": test_pred,
-})
-prediction_table.to_csv(
-    OUTPUT_DIR / "sample_predictions.csv", index=False
+results.to_csv(
+    OUTPUT_DIR / "evaluation_metrics.csv",
+    index=False
 )
 
 print("\nSaved results and plots in the outputs folder.")
