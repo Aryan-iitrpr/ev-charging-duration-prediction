@@ -4,10 +4,6 @@ Predicting electric vehicle charging duration using exploratory data analysis an
 
 ## Team Members and Roles
 
-Predicting electric vehicle charging duration using exploratory data analysis and a Linear Regression model.
-
-## Team Members and Roles
-
 | Team Member | Role and Contribution |
 |---|---|
 | [Member 1 name] | [Actual contribution to the project] |
