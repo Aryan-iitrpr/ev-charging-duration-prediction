@@ -1,241 +1,257 @@
+# ============================================================
+# EV CHARGING DURATION PREDICTION
+# AI101 MINI PROJECT - LINEAR REGRESSION
+# ============================================================
+# 1. IMPORT LIBRARIES
 from pathlib import Path
-import re
-import warnings
 import numpy as np
 import pandas as pd
-import matplotlib
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import (
-    mean_absolute_error,
-    mean_squared_error,
-    r2_score
-)
-from sklearn.dummy import DummyRegressor
-warnings.filterwarnings("ignore")
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-# Project folders
+# 2. SET PROJECT PATHS
 ROOT = Path(__file__).resolve().parent
-DATA_DIR = ROOT / "data"
+DATA_PATH = ROOT / "data" / "ev_charging_patterns.csv"
 OUTPUT_DIR = ROOT / "outputs"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-# Find the dataset CSV
-csv_files = list(DATA_DIR.glob("*.csv")) if DATA_DIR.exists() else []
-if not csv_files:
-    csv_files = [
-        p for p in ROOT.glob("*.csv")
-        if p.name.lower() not in ("results.csv",)
-    ]
-    
-if not csv_files:
+# 3. LOAD DATASET
+if not DATA_PATH.exists():
     raise FileNotFoundError(
-        "Dataset not found. Download the EV charging CSV "
-        "and place it inside the data folder."
+        f"Dataset not found at: {DATA_PATH}\n"
+        "Check that ev_charging_patterns.csv is inside the data folder."
     )
-
-DATA_PATH = csv_files[0]
 df = pd.read_csv(DATA_PATH)
-print("=" * 55)
-print("EV CHARGING DURATION PREDICTION")
-print("=" * 55)
-print(f"\nDataset: {DATA_PATH.name}")
-print(f"Dataset shape: {df.shape}")
-print("\nOriginal columns:")
+print("\n========== DATASET INFORMATION ==========")
+print("Dataset name:", DATA_PATH.name)
+print("Dataset shape:", df.shape)
+print("\nFirst five rows:")
+print(df.head())
+print("\nColumn names:")
 print(df.columns.tolist())
 
-# Normalize column names for reliable matching
-def normalize(name):
-    return re.sub(r"[^a-z0-9]+", "_", str(name).lower()).strip("_")
-    
-column_map = {normalize(c): c for c in df.columns}
+# 4. IDENTIFY TARGET COLUMN
 target_candidates = [
-    "charging_duration_hours",
-    "charging_duration",
-    "chargingduration",
-    "duration_hours",
+    col for col in df.columns
+    if "charging duration" in col.lower()
 ]
-target_col = next(
-    (column_map[c] for c in target_candidates if c in column_map),
-    None
-)
-if target_col is None:
-    target_col = next(
-        (
-            c for c in df.columns
-            if "duration" in normalize(c)
-            and "charging" in normalize(c)
-        ),
-        None
-    )
-if target_col is None:
-    raise ValueError(
-        "Could not identify the charging-duration column. "
-        "Check the printed column names and update target_col."
-    )
+if not target_candidates:
+    raise ValueError("Charging Duration target column not found.")
+    
+TARGET = target_candidates[0]
+print("\nTarget variable:", TARGET)
 
-# Convert target to numeric and remove invalid target rows
-df[target_col] = pd.to_numeric(df[target_col], errors="coerce")
-df = df.dropna(subset=[target_col]).copy()
-df = df[df[target_col] >= 0].copy()
-print(f"\nTarget column: {target_col}")
-print(f"Rows after target cleaning: {len(df)}")
+# 5. DATA CLEANING
+df[TARGET] = pd.to_numeric(df[TARGET], errors="coerce")
+df = df.replace([np.inf, -np.inf], np.nan)
+df = df.dropna(subset=[TARGET])
+print("\n========== DATA CLEANING ==========")
+print("Rows remaining after cleaning:", len(df))
+print("Missing target values:", df[TARGET].isna().sum())
 
-# Basic statistical analysis
-numeric_df = df.select_dtypes(include=np.number)
-print("\nNUMERICAL SUMMARY")
-print(numeric_df.describe().round(3))
+# 6. STATISTICAL ANALYSIS
+print("\n========== STATISTICAL ANALYSIS ==========")
 print("\nMean:")
-print(numeric_df.mean().round(3))
+print(df[TARGET].mean())
 print("\nMedian:")
-print(numeric_df.median().round(3))
-print("\nStandard deviation:")
-print(numeric_df.std().round(3))
-print("\nCovariance matrix:")
-print(numeric_df.cov().round(3))
-print("\nCorrelation matrix:")
-print(numeric_df.corr().round(3))
+print(df[TARGET].median())
+print("\nStandard Deviation:")
+print(df[TARGET].std())
+numeric_data = df.select_dtypes(include=np.number)
+print("\nCovariance Matrix:")
+print(numeric_data.cov())
+print("\nCorrelation Matrix:")
+print(numeric_data.corr())
 
-# Plot target distribution
+# 7. TARGET DISTRIBUTION GRAPH
 plt.figure(figsize=(8, 5))
-plt.hist(df[target_col], bins=25, edgecolor="black")
-plt.xlabel("Charging duration (hours)")
-plt.ylabel("Number of sessions")
+plt.hist(
+    df[TARGET],
+    bins=30,
+    edgecolor="black"
+)
 plt.title("Distribution of EV Charging Duration")
+plt.xlabel("Charging Duration (hours)")
+plt.ylabel("Frequency")
+plt.grid(alpha=0.3)
 plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "duration_distribution.png", dpi=150)
+plt.savefig(OUTPUT_DIR / "duration_distribution.png")
+plt.show()
 plt.close()
 
-# Select features available before or at the start of charging.
-# Avoid IDs, end timestamps, energy delivered, cost, and other
-# variables that can reveal information from the completed session.
+
+# 8. FEATURE SELECTION
 feature_keywords = [
-    "battery_capacity",
-    "charging_rate",
-    "state_of_charge_start",
+    "vehicle model",
+    "battery capacity",
+    "charging rate",
+    "time of day",
+    "day of week",
+    "state of charge (start)",
     "temperature",
-    "vehicle_age",
-    "vehicle_model",
-    "charger_type",
-    "user_type",
-    "time_of_day",
-    "day_of_week",
+    "vehicle age",
+    "charger type",
+    "user type"
 ]
-feature_cols = [
-    c for c in df.columns
-    if c != target_col
-    and any(k in normalize(c) for k in feature_keywords)
-]
-if not feature_cols:
-    raise ValueError(
-        "No expected predictor columns were found. "
-        "Inspect the printed column names and update feature_cols."
-    )
+selected_features = []
+for keyword in feature_keywords:
+    matches = [
+        col for col in df.columns
+        if keyword in col.lower()
+    ]
 
-# Remove columns that contain no usable values
-feature_cols = [
-    c for c in feature_cols
-    if df[c].notna().any()
-]
-X = df[feature_cols].copy()
-y = df[target_col].copy()
+    if matches:
+        selected_features.append(matches[0])
+if not selected_features:
+    raise ValueError("No input features were selected.")
 
-# Convert numeric-looking columns where appropriate
-for col in X.columns:
-    if X[col].dtype == "object":
-        converted = pd.to_numeric(X[col], errors="coerce")
-        if converted.notna().mean() > 0.8:
-            X[col] = converted
-numeric_features = X.select_dtypes(include=np.number).columns.tolist()
-categorical_features = [
-    c for c in X.columns if c not in numeric_features
-]
-print("\nSelected features:")
-print(feature_cols)
-print("\nNumeric features:", numeric_features)
-print("Categorical features:", categorical_features)
+X = df[selected_features]
+y = df[TARGET]
+print("\n========== FEATURE SELECTION ==========")
+print("Selected features:")
+print(selected_features)
+print("\nNumber of selected features:", len(selected_features))
 
-# Train/test split: keep test data separate from model training
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+# 9. IDENTIFY NUMERICAL AND CATEGORICAL FEATURES
+numeric_features = X.select_dtypes(
+    include=np.number
+).columns.tolist()
+categorical_features = X.select_dtypes(
+    exclude=np.number
+).columns.tolist()
+print("\nNumerical features:")
+print(numeric_features)
+print("\nCategorical features:")
+print(categorical_features)
+
+# 10. DATA PREPROCESSING
+numeric_transformer = Pipeline(
+    steps=[
+        ("imputer", SimpleImputer(strategy="median")),
+        ("scaler", StandardScaler())
+    ]
 )
-numeric_pipeline = Pipeline([
-    ("imputer", SimpleImputer(strategy="median")),
-    ("scaler", StandardScaler()),
-])
-categorical_pipeline = Pipeline([
-    ("imputer", SimpleImputer(strategy="most_frequent")),
-    ("encoder", OneHotEncoder(handle_unknown="ignore")),
-])
-preprocessor = ColumnTransformer([
-    ("numeric", numeric_pipeline, numeric_features),
-    ("categorical", categorical_pipeline, categorical_features),
-])
-model = Pipeline([
-    ("preprocessor", preprocessor),
-    ("regressor", LinearRegression()),
-])
+categorical_transformer = Pipeline(
+    steps=[
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("encoder", OneHotEncoder(handle_unknown="ignore"))
+    ]
+)
+preprocessor = ColumnTransformer(
+    transformers=[
+        ("numeric", numeric_transformer, numeric_features),
+        ("categorical", categorical_transformer, categorical_features)
+    ]
+)
 
-# Train the linear regression model
+# 11. TRAIN-TEST SPLIT
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42
+)
+print("\n========== TRAIN-TEST SPLIT ==========")
+print("Training samples:", len(X_train))
+print("Testing samples:", len(X_test))
+
+# 12. BUILD LINEAR REGRESSION MODEL
+model = Pipeline(
+    steps=[
+        ("preprocessor", preprocessor),
+        ("regressor", LinearRegression())
+    ]
+)
+
+# 13. TRAIN MODEL
 model.fit(X_train, y_train)
+print("\n========== MODEL TRAINING ==========")
+print("Linear Regression model trained successfully.")
 
-# Simple baseline: predict the training-set mean
-baseline = DummyRegressor(strategy="mean")
-baseline.fit(X_train, y_train)
+# 14. MAKE PREDICTIONS
+y_pred = model.predict(X_test)
+# 15. MODEL EVALUATION
+mae = mean_absolute_error(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)
+print("\n========== LINEAR REGRESSION TEST RESULTS ==========")
+print(f"MAE  : {mae:.4f}")
+print(f"MSE  : {mse:.4f}")
+print(f"RMSE : {rmse:.4f}")
+print(f"R2   : {r2:.4f}")
 
-# Predictions on unseen test data
-test_pred = model.predict(X_test)
-baseline_pred = baseline.predict(X_test)
-def evaluate(name, actual, predicted):
-    mse = mean_squared_error(actual, predicted)
-    return {
-        "Model": name,
-        "MAE_hours": mean_absolute_error(actual, predicted),
-        "RMSE_hours": np.sqrt(mse),
-        "R2": r2_score(actual, predicted),
-    }
-results = pd.DataFrame([
-    evaluate("Mean baseline", y_test, baseline_pred),
-    evaluate("Linear Regression", y_test, test_pred),
-])
-
-print("\nTEST SET MODEL COMPARISON")
-print(results.round(4).to_string(index=False))
-results.to_csv(
+# 16. SAVE EVALUATION METRICS
+metrics_df = pd.DataFrame({
+    "Metric": ["MAE", "MSE", "RMSE", "R2 Score"],
+    "Value": [mae, mse, rmse, r2]
+})
+metrics_df.to_csv(
     OUTPUT_DIR / "evaluation_metrics.csv",
     index=False
 )
 
-# Actual vs predicted graph
-plt.figure(figsize=(7, 6))
-plt.scatter(y_test, test_pred, alpha=0.7)
-lower = min(y_test.min(), test_pred.min())
-upper = max(y_test.max(), test_pred.max())
-plt.plot([lower, upper], [lower, upper], "r--")
-plt.xlabel("Actual charging duration (hours)")
-plt.ylabel("Predicted charging duration (hours)")
-plt.title("Actual vs Predicted: Test Set")
+# 17. ACTUAL VS PREDICTED GRAPH
+plt.figure(figsize=(8, 5))
+plt.scatter(
+    y_test,
+    y_pred,
+    alpha=0.7
+)
+min_value = min(y_test.min(), y_pred.min())
+max_value = max(y_test.max(), y_pred.max())
+plt.plot(
+    [min_value, max_value],
+    [min_value, max_value],
+    linestyle="--"
+)
+plt.title("Actual vs Predicted Charging Duration")
+plt.xlabel("Actual Charging Duration (hours)")
+plt.ylabel("Predicted Charging Duration (hours)")
+plt.grid(alpha=0.3)
 plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "actual_vs_predicted.png", dpi=150)
+plt.savefig(OUTPUT_DIR / "actual_vs_predicted.png")
+plt.show()
 plt.close()
 
-# Residual graph
-residuals = y_test.to_numpy() - test_pred
-plt.figure(figsize=(7, 5))
-plt.scatter(test_pred, residuals, alpha=0.7)
-plt.axhline(0, color="red", linestyle="--")
-plt.xlabel("Predicted charging duration (hours)")
-plt.ylabel("Residual (actual - predicted)")
-plt.title("Residual Plot: Test Set")
+# 18. RESIDUAL PLOT
+residuals = y_test - y_pred
+plt.figure(figsize=(8, 5))
+plt.scatter(
+    y_pred,
+    residuals,
+    alpha=0.7
+)
+plt.axhline(
+    y=0,
+    linestyle="--"
+)
+plt.title("Residual Plot")
+plt.xlabel("Predicted Charging Duration (hours)")
+plt.ylabel("Residuals")
+plt.grid(alpha=0.3)
 plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "residual_plot.png", dpi=150)
+plt.savefig(OUTPUT_DIR / "residual_plot.png")
+plt.show()
 plt.close()
-print("\nSaved results and plots in the outputs folder.")
-print("\nSaved results and plots in the outputs folder.")
-print("Review the test metrics before drawing conclusions.")
+
+# 19. FINAL SUMMARY
+print("\n========== PROJECT SUMMARY ==========")
+print("Project: EV Charging Duration Prediction")
+print("Algorithm: Linear Regression")
+print("Target:", TARGET)
+print("Input features:", len(selected_features))
+print("Training samples:", len(X_train))
+print("Testing samples:", len(X_test))
+print("\nGenerated files:")
+print("- outputs/duration_distribution.png")
+print("- outputs/actual_vs_predicted.png")
+print("- outputs/residual_plot.png")
+print("- outputs/evaluation_metrics.csv")
+print("\nProject execution completed successfully!")
