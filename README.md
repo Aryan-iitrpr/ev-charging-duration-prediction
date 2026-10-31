@@ -101,15 +101,15 @@ After running the project, the following files will be generated in the `outputs
 ## Methodology
 
 1. Load and inspect the dataset.
-2. Calculate descriptive statistics and examine correlations.
-3. Visualize the distribution of charging duration.
+2. Calculate descriptive statistics (mean,median etc.) and examine correlations.
+3. Visualize the distribution of charging duration using graphs. 
 4. Select vehicle, charging, and environmental features.
 5. Handle missing numerical and categorical values using preprocessing pipelines.
 6. Split the data into training and test sets.
 7. Train a Linear Regression model.
 8. Compare it with a mean-prediction baseline.
 9. Evaluate the predictions using MAE, RMSE, and R².
-10. Save the evaluation metrics and visualizations.
+10. Save the evaluation metrics and visualizations. 
 
 ## Results
 
