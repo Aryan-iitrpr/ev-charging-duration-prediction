@@ -6,10 +6,10 @@ Predicting electric vehicle charging duration using exploratory data analysis an
 
 | Team Member | Role and Contribution |
 |---|---|
-| [Member 1 name] | [Actual contribution to the project] |
-| [Member 2 name] | [Actual contribution to the project] |
-| [Member 3 name] | [Actual contribution to the project] |
-| [Member 4 name] | [Actual contribution to the project] |
+| anika-s40 | Documentation Lead |
+| Samarthgupta1406 | Video Lead|
+| Aryan-iitrpr | Execution Lead |
+| SaurabhDagar29 | PPT Lead |
 
 All team members contributed to the project according to their assigned responsibilities. The roles above should be updated to reflect the actual work performed by each member.
 
