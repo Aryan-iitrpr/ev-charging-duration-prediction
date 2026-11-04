@@ -69,21 +69,16 @@ print(numeric_data.cov())
 print("\nCorrelation Matrix:")
 print(numeric_data.corr())
 
-# 7. TARGET DISTRIBUTION GRAPH
-plt.figure(figsize=(8, 5))
-plt.hist(
-    df[TARGET],
-    bins=30,
-    edgecolor="black"
-)
+# 7. Graph 1: TARGET DISTRIBUTION GRAPH
+plt.figure(figsize=(7, 4))
+plt.hist(y, bins=30, color="skyblue", edgecolor="black")
 plt.title("Distribution of EV Charging Duration")
 plt.xlabel("Charging Duration (hours)")
 plt.ylabel("Frequency")
-plt.grid(alpha=0.3)
+plt.grid(True, linestyle="--", alpha=0.5)
 plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "duration_distribution.png")
+plt.savefig(output_dir / "duration_distribution.png")
 plt.show()
-plt.close()
 
 
 # 8. FEATURE SELECTION
@@ -197,49 +192,37 @@ metrics_df.to_csv(
     index=False
 )
 
-# 17. ACTUAL VS PREDICTED GRAPH
-plt.figure(figsize=(8, 5))
-plt.scatter(
-    y_test,
-    y_pred,
-    alpha=0.7
-)
-min_value = min(y_test.min(), y_pred.min())
-max_value = max(y_test.max(), y_pred.max())
+# 17. Graph 2: ACTUAL VS PREDICTED GRAPH
+plt.figure(figsize=(7, 4))
+plt.scatter(y_test, y_pred, alpha=0.6, color="blue")
 plt.plot(
-    [min_value, max_value],
-    [min_value, max_value],
-    linestyle="--"
+    [y_test.min(), y_test.max()],
+    [y_test.min(), y_test.max()],
+    color="red",
+    linestyle="--",
+    label="Ideal Prediction",
 )
 plt.title("Actual vs Predicted Charging Duration")
-plt.xlabel("Actual Charging Duration (hours)")
-plt.ylabel("Predicted Charging Duration (hours)")
-plt.grid(alpha=0.3)
+plt.xlabel("Actual Duration (hours)")
+plt.ylabel("Predicted Duration (hours)")
+plt.legend()
+plt.grid(True, linestyle="--", alpha=0.5)
 plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "actual_vs_predicted.png")
+plt.savefig(output_dir / "actual_vs_predicted.png")
 plt.show()
-plt.close()
 
-# 18. RESIDUAL PLOT
+# 18. Graph 3: RESIDUAL PLOT (Prediction Errors)
 residuals = y_test - y_pred
-plt.figure(figsize=(8, 5))
-plt.scatter(
-    y_pred,
-    residuals,
-    alpha=0.7
-)
-plt.axhline(
-    y=0,
-    linestyle="--"
-)
-plt.title("Residual Plot")
-plt.xlabel("Predicted Charging Duration (hours)")
-plt.ylabel("Residuals")
-plt.grid(alpha=0.3)
+plt.figure(figsize=(7, 4))
+plt.scatter(y_pred, residuals, alpha=0.6, color="purple")
+plt.axhline(y=0, color="red", linestyle="--")
+plt.title("Residual Plot (Prediction Errors)")
+plt.xlabel("Predicted Duration (hours)")
+plt.ylabel("Error (Actual - Predicted)")
+plt.grid(True, linestyle="--", alpha=0.5)
 plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "residual_plot.png")
+plt.savefig(output_dir / "residual_plot.png")
 plt.show()
-plt.close()
 
 # 19. FINAL SUMMARY
 print("\n========== PROJECT SUMMARY ==========")
