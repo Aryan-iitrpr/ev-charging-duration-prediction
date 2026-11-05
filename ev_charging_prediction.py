@@ -14,6 +14,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+output_dir = Path("outputs")
+output_dir.mkdir(parents=True, exist_ok=True)
 
 # 2. SET PROJECT PATHS
 ROOT = Path(__file__).resolve().parent
@@ -71,7 +73,7 @@ print(numeric_data.corr())
 
 # 7. Graph 1: TARGET DISTRIBUTION GRAPH
 plt.figure(figsize=(7, 4))
-plt.hist(y, bins=30, color="skyblue", edgecolor="black")
+plt.hist(df[TARGET].dropna(), bins=30, color="skyblue", edgecolor="black")
 plt.title("Distribution of EV Charging Duration")
 plt.xlabel("Charging Duration (hours)")
 plt.ylabel("Frequency")
