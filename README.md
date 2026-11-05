@@ -131,7 +131,7 @@ These results suggest that the selected features and linear model do not yet pro
 
 ## Presentation and Demo
 
-- **Slides:** [Add your presentation link]
+- **Slides:** https://drive.google.com/file/d/1KK8nsWl4vvYid5S0PFvumyEcJKQn9p1Q/view?usp=drivesdk
 - **Demo video (5 minutes maximum):** [Add your video link]
 
 ## AI-Use Disclosure
