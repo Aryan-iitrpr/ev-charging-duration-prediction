@@ -239,20 +239,16 @@ print("- outputs/residual_plot.png")
 print("- outputs/evaluation_metrics.csv")
 print("\nProject execution completed successfully!")
 
+#Logistic Regression
 from sklearn.model_selection import train_test_split
-
 # Convert regression target into classification target
 threshold = y.median()
-
 y_class = (y > threshold).astype(int)
-
 # 0 = Short charging duration
 # 1 = Long charging duration
-
 print("Classification threshold:", threshold)
 print("\nClass distribution:")
 print(y_class.value_counts())
-
 # Split dataset
 X_train, X_test, y_train_class, y_test_class = train_test_split(
     X, y_class,
@@ -260,6 +256,5 @@ X_train, X_test, y_train_class, y_test_class = train_test_split(
     random_state=42,
     stratify=y_class
 )
-
 print("Training data:", X_train.shape)
 print("Testing data:", X_test.shape)
