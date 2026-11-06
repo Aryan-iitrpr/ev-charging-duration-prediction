@@ -242,6 +242,7 @@ print("- outputs/evaluation_metrics.csv")
 print("\nProject execution completed successfully!")
 
 #Logistic Regression
+
 from sklearn.model_selection import train_test_split
 # Convert regression target into classification target
 threshold = y.median()
@@ -260,3 +261,20 @@ X_train, X_test, y_train_class, y_test_class = train_test_split(
 )
 print("Training data:", X_train.shape)
 print("Testing data:", X_test.shape)
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.base import clone
+
+# Create Logistic Regression pipeline
+logistic_model = Pipeline([
+    ("preprocessor", clone(preprocessor)),
+    ("classifier", LogisticRegression(max_iter=1000))
+]) 
+# Train model
+logistic_model.fit(X_train, y_train_class)
+
+# Make predictions
+y_pred_class = logistic_model.predict(X_test)
+print("Model training completed!")
+print("Predictions:", y_pred_class[:10])
