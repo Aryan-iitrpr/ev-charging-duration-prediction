@@ -299,3 +299,25 @@ print("Accuracy:", accuracy)
 print("Precision:", precision)
 print("Recall:", recall)
 print("F1 Score:", f1)
+
+# Classification report
+print("\nClassification Report:")
+print(classification_report(y_test_class, y_pred_class))
+
+# Confusion matrix
+cm = confusion_matrix(y_test_class, y_pred_class)
+
+plt.figure(figsize=(6, 4))
+plt.imshow(cm, cmap="Blues")
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.colorbar()
+
+for i in range(2):
+    for j in range(2):
+        plt.text(j, i, cm[i, j], ha="center", va="center")
+
+plt.tight_layout()
+plt.savefig("outputs/logistic_confusion_matrix.png")
+plt.show()
