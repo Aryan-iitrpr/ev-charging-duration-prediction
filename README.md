@@ -136,7 +136,7 @@ These results suggest that the selected features and linear model do not yet pro
 
 ## AI-Use Disclosure
 
-AI assistance was used for guidance on project development, debugging, explanations, and documentation. The code was run and the reported results were checked against the local program output. All team members should review the final code and understand the work they submit. Update this disclosure to accurately reflect the tools used and each person's contribution.
+AI assistance was used for guidance on project development, debugging, explanations, and documentation. The code was run and the reported results were checked against the local program output. Ai was also used for learning new syntax used in the python file. It assisted members to get information about editing videos and making better presentations. 
 
 ## Limitations and Future Work
 
