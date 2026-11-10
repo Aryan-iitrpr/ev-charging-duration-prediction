@@ -279,7 +279,7 @@ logistic_model.fit(X_train, y_train_class)
 
 # Make predictions
 y_pred_class = logistic_model.predict(X_test)
-print("Model training completed!")
+print("\nModel training completed!")
 print("Predictions:", y_pred_class[:10])
 
 from sklearn.metrics import (
@@ -293,13 +293,13 @@ from sklearn.metrics import (
 import matplotlib.pyplot as plt
 
 # Calculate evaluation metrics
-print("=====EVALUATION METRICES=====")
+print("\n=====EVALUATION METRICES=====\n")
 accuracy = accuracy_score(y_test_class, y_pred_class)
 precision = precision_score(y_test_class, y_pred_class)
 recall = recall_score(y_test_class, y_pred_class)
 f1 = f1_score(y_test_class, y_pred_class)
 
-print("Accuracy:", accuracy)
+print("\nAccuracy:", accuracy)
 print("Precision:", precision)
 print("Recall:", recall)
 print("F1 Score:", f1)
