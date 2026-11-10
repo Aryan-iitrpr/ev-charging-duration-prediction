@@ -76,13 +76,17 @@ cd ev-charging-duration-prediction
 ```
 
 Create and activate a virtual environment :
-
+for macos\linux users:
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate( for macOS\linux users )
-.\.venv\Scripts\Activate.ps1 ( for windows users )
+source .venv/bin/activate
+.\.venv\Scripts\Activate.ps1 
 ```
-
+for windows users
+```bash
+python3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 Install dependencies:
 
 ```bash
