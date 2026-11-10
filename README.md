@@ -75,11 +75,12 @@ git clone https://github.com/Aryan-iitrpr/ev-charging-duration-prediction.git
 cd ev-charging-duration-prediction
 ```
 
-Create and activate a virtual environment on macOS/Linux:
+Create and activate a virtual environment :
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate( for macOS\linux users )
+.\.venv\Scripts\Activate.ps1 ( for windows users )
 ```
 
 Install dependencies:
