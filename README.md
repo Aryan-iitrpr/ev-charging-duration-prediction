@@ -4,12 +4,12 @@ Predicting electric vehicle charging duration using exploratory data analysis an
 
 ## Team Members and Roles
 
-| Team Member | Role and Contribution |
-|---|---|
-| anika-s40 | Documentation Lead |
-| Samarthgupta1406 | Video Lead|
-| Aryan-iitrpr | Execution Lead |
-| SaurabhDagar29 | PPT Lead |
+| Team Member ID | Entry Number |Role and Contribution | 
+|---|---|---|
+| anika-s40 | 2026AIB1013 | Documentation Lead |
+| Samarthgupta1406 | 2026EEB1406 | Video Lead|
+| Aryan-iitrpr | 2026EEB1327 | Execution Lead |
+| SaurabhDagar29 | 2026MCB1566 | PPT Lead |
 
 All the group members have also contributed to the coding part of the model.
 
