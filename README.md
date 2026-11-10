@@ -1,6 +1,6 @@
 # EV Charging Duration Prediction
 
-Predicting electric vehicle charging duration using exploratory data analysis and a Linear Regression model.
+Predicting electric vehicle charging duration using exploratory data analysis and a Linear & Logistic Regression model.
 
 ## Team Members and Roles
 
@@ -11,12 +11,11 @@ Predicting electric vehicle charging duration using exploratory data analysis an
 | Aryan-iitrpr | Execution Lead |
 | SaurabhDagar29 | PPT Lead |
 
-The group members have also contributed to the coding part of the model.
+All the group members have also contributed to the coding part of the model.
 
 ## Problem Statement
 
 Electric vehicle charging duration can depend on factors such as battery capacity, charging rate, starting state of charge, vehicle model, and environmental conditions.
-
 The objective of this project is to explore an EV charging dataset and build a regression model to predict **Charging Duration (hours)** from selected vehicle, charging, and environmental features.
 
 ## Dataset
@@ -104,8 +103,8 @@ After running the project, the following files will be generated in the `outputs
 
 - `actual_vs_predicted.png` — Actual versus predicted charging durations.
 - `duration_distribution.png` — Distribution of charging duration.
-- `evaluation_metrics.csv` — Evaluation metrics for the baseline and Linear Regression models.
-- `logistic_confusion_matrix.png` - Confusion Matrix for the model.
+- `evaluation_metrics.csv` — Evaluation metrics for the baseline and Linear Regression model.
+- `logistic_confusion_matrix.png` - Confusion Matrix for the Logistic Regression model.
 - `residual_plot.png` — Residual plot for the Linear Regression model.
 
 ### Actual vs Predicted Charging Duration
