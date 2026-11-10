@@ -14,6 +14,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import seaborn as sns
 output_dir = Path("outputs")
 output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -324,4 +325,24 @@ for i in range(2):
 
 plt.tight_layout()
 plt.savefig("outputs/logistic_confusion_matrix.png")
+plt.show()
+# ADDITION : CORRELATION HEATMAP
+plt.figure(figsize=(11, 8))
+
+sns.heatmap(
+    numeric_data.corr(),
+    annot=True,
+    cmap="coolwarm",
+    fmt=".2f",
+    linewidths=0.5
+)
+
+plt.title("Correlation Heatmap of Numerical Features")
+
+plt.tight_layout()
+
+plt.savefig(
+    OUTPUT_DIR / "correlation_heatmap.png"
+)
+
 plt.show()
