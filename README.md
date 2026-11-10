@@ -34,10 +34,11 @@ ev-charging-duration-prediction/
 ├── data/
 │   └── ev_charging_patterns.csv
 ├── outputs/
-│   ├── duration_distribution.png
 │   ├── actual_vs_predicted.png
-│   ├── residual_plot.png
-│   └── evaluation_metrics.csv
+│   ├── duration_distribution.png
+│   ├── evaluation_metrics.csv
+│   ├── logistic_confusion_matrix.png
+│   └── residual_plot.png
 ├── ev_charging_prediction.py
 ├── requirements.txt
 ├── .gitignore
@@ -99,9 +100,10 @@ The script reads the dataset from the repository's `data/` folder, performs anal
 
 After running the project, the following files will be generated in the `outputs/` folder:
 
+- `actual_vs_predicted.png` — Actual versus predicted charging durations.
 - `duration_distribution.png` — Distribution of charging duration.
 - `evaluation_metrics.csv` — Evaluation metrics for the baseline and Linear Regression models.
-- `actual_vs_predicted.png` — Actual versus predicted charging durations.
+- `logistic_confusion_matrix.png` - Confusion Matrix for the model.
 - `residual_plot.png` — Residual plot for the Linear Regression model.
 
 ### Actual vs Predicted Charging Duration
@@ -127,6 +129,7 @@ These results suggest that the selected features and linear model do not yet pro
 - `duration_distribution.png`: Distribution of charging duration.
 - `actual_vs_predicted.png`: Actual versus predicted charging durations on the test set.
 - `residual_plot.png`: Residuals against predicted values.
+- `logistic_confusion_matrix.png`: Confusion Matrix for Logistic Regression Model.
 - `evaluation_metrics.csv`: Model evaluation metrics.
 
 ## Presentation and Demo
