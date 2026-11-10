@@ -11,6 +11,8 @@ Predicting electric vehicle charging duration using exploratory data analysis an
 | Aryan-iitrpr | Execution Lead |
 | SaurabhDagar29 | PPT Lead |
 
+The group members have also contributed to the coding part of the model.
+
 ## Problem Statement
 
 Electric vehicle charging duration can depend on factors such as battery capacity, charging rate, starting state of charge, vehicle model, and environmental conditions.
@@ -56,13 +58,13 @@ The Python libraries used include NumPy, pandas, Matplotlib, Seaborn, and scikit
 
 1. Load and inspect the dataset.
 2. Calculate descriptive statistics (mean,median etc.) and examine correlations.
-3. Visualize the distribution of charging duration using graphs. 
-4. Select vehicle, charging, and environmental features.
-5. Handle missing numerical and categorical values using preprocessing pipelines.
-6. Split the data into training and test sets.
-7. Train a Linear Regression model.
-8. Compare it with a mean-prediction baseline.
-9. Evaluate the predictions using MAE, RMSE, and R².
+3. Visualize the distribution of charging duration using graphs and Select features.
+4. Handle missing numerical and categorical values using preprocessing pipelines.
+5. Split the data into training and test sets.
+6. Train a Linear Regression model.
+7. Compare it with a mean-prediction baseline and evaluate the predictions using MAE, RMSE, and R².
+8. Train a Logistic Regression Model.
+9. Generate Confusion Matrix for the Model and other evaluation parameters.
 10. Save the evaluation metrics and visualizations.
 
 ## Setup and Run
@@ -121,6 +123,7 @@ The current test-set results are:
 | Linear Regression | 0.8726 | 1.0996 | -0.0455 |
 
 The Linear Regression model performed slightly worse than the mean baseline on the test set. Its negative R² indicates that, on this split, it performed worse than predicting the mean target value.
+The Logistic Regression model performs similarly.
 
 These results suggest that the selected features and linear model do not yet provide strong predictive performance. Further feature analysis, data-quality checks, and experiments with other models may improve the results.
 
@@ -135,7 +138,7 @@ These results suggest that the selected features and linear model do not yet pro
 ## Presentation and Demo
 
 - **Slides:** https://1drv.ms/p/c/2e655bb3a1d5945f/IQAb_zBTEWzpTaeoD4rhoQHaAcXEpw7ezysOPz7Q-DNDSDs
-- **Demo video (5 minutes maximum):** [Add your video link]
+- **Demo video:** [Add your video link]
 
 ## AI-Use Disclosure
 
@@ -143,7 +146,7 @@ AI assistance was used for guidance on project development, debugging, explanati
 
 ## Limitations and Future Work
 
-- The current Linear Regression model does not outperform the mean baseline.
+- The current Linear or Logistic Regression model does not outperform the mean baseline.
 - Investigate relationships between selected features and charging duration.
 - Check for data-quality issues and potentially informative features.
 - Experiment with other regression models and compare their test-set performance.
