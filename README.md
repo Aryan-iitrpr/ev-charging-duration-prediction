@@ -80,7 +80,6 @@ for macos\linux users:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-.\.venv\Scripts\Activate.ps1 
 ```
 for windows users
 ```bash
