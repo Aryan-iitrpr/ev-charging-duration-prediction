@@ -2,6 +2,8 @@
 
 Predicting electric vehicle charging duration using exploratory data analysis and a Linear & Logistic Regression model.
 
+#### AI101 Mini-Project | Team - 65 
+
 ## Team Members and Roles
 
 | Team Member ID | Entry Number |Role and Contribution | 
