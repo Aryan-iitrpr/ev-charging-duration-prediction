@@ -36,6 +36,7 @@ ev-charging-duration-prediction/
 │   └── ev_charging_patterns.csv
 ├── outputs/
 │   ├── actual_vs_predicted.png
+│   ├── correlation_heatmap.png
 │   ├── duration_distribution.png
 │   ├── evaluation_metrics.csv
 │   ├── logistic_confusion_matrix.png
@@ -106,6 +107,7 @@ The script reads the dataset from the repository's `data/` folder, performs anal
 After running the project, the following files will be generated in the `outputs/` folder:
 
 - `actual_vs_predicted.png` — Actual versus predicted charging durations.
+- `correlation_heatmap.png` — Correlation Heatmap for the model.
 - `duration_distribution.png` — Distribution of charging duration.
 - `evaluation_metrics.csv` — Evaluation metrics for the baseline and Linear Regression model.
 - `logistic_confusion_matrix.png` - Confusion Matrix for the Logistic Regression model.
@@ -133,6 +135,7 @@ These results suggest that the selected features and linear model do not yet pro
 ## Output Files
 
 - `duration_distribution.png`: Distribution of charging duration.
+- `correlation_heatmap.png`: Correlation Heatmap.
 - `actual_vs_predicted.png`: Actual versus predicted charging durations on the test set.
 - `residual_plot.png`: Residuals against predicted values.
 - `logistic_confusion_matrix.png`: Confusion Matrix for Logistic Regression Model.
@@ -141,7 +144,7 @@ These results suggest that the selected features and linear model do not yet pro
 ## Presentation and Demo
 
 - **Slides:** https://drive.google.com/file/d/1JqACy03oN0GLFryTHKoQ1qEY3RaUmhI1/view?usp=drive_link
-- **Demo video:** [Add your video link]
+- **Demo Video:** https://drive.google.com/file/d/1XA0q8qIhAUd6r-FlE32NGtW8u2gHiRE8/view?usp=sharing
 
 ## AI-Use Disclosure
 
